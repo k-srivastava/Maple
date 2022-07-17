@@ -17,16 +17,19 @@ public class MainGameLoop {
 
         // Vertex positions for a rectangle.
         float[] vertices = {
-                -0.5f,  0.5f, 0f,
-                -0.5f, -0.5f, 0f,
-                 0.5f, -0.5f, 0f,
-
-                 0.5f, -0.5f, 0f,
-                 0.5f,  0.5f, 0f,
-                -0.5f,  0.5f, 0f
+                -0.5f, 0.5f, 0,
+                -0.5f, -0.5f, 0,
+                0.5f, -0.5f, 0,
+                0.5f, 0.5f, 0
         };
 
-        RawModel model = loader.loadToVAO(vertices);
+        // Index for rendering order of vertices for a rectangle.
+        int[] indices = {
+                0, 1, 3,
+                3, 1, 2
+        };
+
+        RawModel model = loader.loadToVAO(vertices, indices);
 
         while (!Display.isCloseRequested()) {
             renderer.prepare();

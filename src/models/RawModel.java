@@ -1,4 +1,4 @@
-package renderEngine;
+package models;
 
 /**
  * Create a new raw model used by the engine to render batches of vertices to the display.

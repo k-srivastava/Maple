@@ -1,6 +1,9 @@
 package renderEngine;
 
+import models.RawModel;
+import models.TexturedModel;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -20,13 +23,21 @@ public class Renderer {
      * Render a raw model to the display by first binding a VAO and enabling it before drawing the triangles for
      * the model. Then the VAO is disabled and unbound.
      *
-     * @param model Raw model to be rendered to the display.
+     * @param texturedModel Raw model to be rendered to the display.
      */
-    public void render(RawModel model) {
+    public void render(TexturedModel texturedModel) {
+        RawModel model = texturedModel.rawModel();
+
         GL30.glBindVertexArray(model.vaoID());
         GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.texture().textureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, model.vertexCount(), GL11.GL_UNSIGNED_INT, 0);
+
         GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
     }
 }

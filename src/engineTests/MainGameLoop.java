@@ -5,6 +5,7 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.RawModel;
 import renderEngine.Renderer;
+import shaders.StaticShader;
 
 /**
  * Main game loop for the game engine and entry point for testing the engine.
@@ -14,6 +15,8 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
+
+        StaticShader shader = new StaticShader();
 
         // Vertex positions for a rectangle.
         float[] vertices = {
@@ -33,10 +36,15 @@ public class MainGameLoop {
 
         while (!Display.isCloseRequested()) {
             renderer.prepare();
+
+            shader.start();
             renderer.render(model);
+            shader.stop();
+
             DisplayManager.updateDisplay();
         }
 
+        shader.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
     }

@@ -1,11 +1,13 @@
 package engineTests;
 
+import models.TexturedModel;
 import org.lwjgl.opengl.Display;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
-import renderEngine.RawModel;
+import models.RawModel;
 import renderEngine.Renderer;
 import shaders.StaticShader;
+import textures.ModelTexture;
 
 /**
  * Main game loop for the game engine and entry point for testing the engine.
@@ -32,13 +34,23 @@ public class MainGameLoop {
                 3, 1, 2
         };
 
-        RawModel model = loader.loadToVAO(vertices, indices);
+        // Texture coordinates for a rectangle.
+        float[] textureCoordinates = {
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0
+        };
+
+        RawModel model = loader.loadToVAO(vertices, textureCoordinates, indices);
+        ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
+        TexturedModel texturedModel = new TexturedModel(model, texture);
 
         while (!Display.isCloseRequested()) {
             renderer.prepare();
 
             shader.start();
-            renderer.render(model);
+            renderer.render(texturedModel);
             shader.stop();
 
             DisplayManager.updateDisplay();

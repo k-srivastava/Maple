@@ -1,10 +1,14 @@
 package engineTests;
 
+import entities.Camera;
+import entities.Entity;
+import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
-import models.RawModel;
+import renderEngine.OBJLoader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
 import textures.ModelTexture;
@@ -15,44 +19,27 @@ import textures.ModelTexture;
 public class MainGameLoop {
     public static void main(String[] args) {
         DisplayManager.createDisplay();
+
         Loader loader = new Loader();
-        Renderer renderer = new Renderer();
-
         StaticShader shader = new StaticShader();
+        Renderer renderer = new Renderer(shader);
+        Camera camera = new Camera();
 
-        // Vertex positions for a rectangle.
-        float[] vertices = {
-                -0.5f, 0.5f, 0,
-                -0.5f, -0.5f, 0,
-                0.5f, -0.5f, 0,
-                0.5f, 0.5f, 0
-        };
-
-        // Index for rendering order of vertices for a rectangle.
-        int[] indices = {
-                0, 1, 3,
-                3, 1, 2
-        };
-
-        // Texture coordinates for a rectangle.
-        float[] textureCoordinates = {
-                0, 0,
-                0, 1,
-                1, 1,
-                1, 0
-        };
-
-        RawModel model = loader.loadToVAO(vertices, textureCoordinates, indices);
-        ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
-        TexturedModel texturedModel = new TexturedModel(model, texture);
+        RawModel model = OBJLoader.loadOBJModel("stall", loader);
+        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("stallTexture")));
+        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -50), new Vector3f(), 1);
 
         while (!Display.isCloseRequested()) {
+            entity.rotate(new Vector3f(0, 1, 0));
+            camera.move();
+
             renderer.prepare();
-
             shader.start();
-            renderer.render(texturedModel);
-            shader.stop();
 
+            shader.loadViewMatrix(camera);
+            renderer.render(entity, shader);
+
+            shader.stop();
             DisplayManager.updateDisplay();
         }
 

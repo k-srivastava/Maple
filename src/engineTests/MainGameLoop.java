@@ -2,6 +2,7 @@ package engineTests;
 
 import entities.Camera;
 import entities.Entity;
+import entities.Light;
 import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
@@ -25,9 +26,14 @@ public class MainGameLoop {
         Renderer renderer = new Renderer(shader);
         Camera camera = new Camera();
 
-        RawModel model = OBJLoader.loadOBJModel("stall", loader);
-        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("stallTexture")));
-        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -50), new Vector3f(), 1);
+        RawModel model = OBJLoader.loadOBJModel("dragon", loader);
+        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("white")));
+        ModelTexture texture = staticModel.texture();
+        texture.setShineDamping(10);
+        texture.setReflectivity(1);
+
+        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -25), new Vector3f(), 1);
+        Light light = new Light(new Vector3f(0, 0, -20), new Vector3f(1, 1, 1));
 
         while (!Display.isCloseRequested()) {
             entity.rotate(new Vector3f(0, 1, 0));
@@ -35,6 +41,7 @@ public class MainGameLoop {
 
             renderer.prepare();
             shader.start();
+            shader.loadLight(light);
 
             shader.loadViewMatrix(camera);
             renderer.render(entity, shader);

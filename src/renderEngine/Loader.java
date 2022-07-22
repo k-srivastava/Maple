@@ -49,15 +49,17 @@ public class Loader {
      *
      * @param positions          Vertex positions of the model.
      * @param textureCoordinates Coordinates of the texture to be mapped onto the model.
+     * @param normals            Normal vectors of the model.
      * @param indices            Indices of vertex positions of the model.
      * @return Raw model stored in a VAO.
      */
-    public RawModel loadToVAO(float[] positions, float[] textureCoordinates, int[] indices) {
+    public RawModel loadToVAO(float[] positions, float[] textureCoordinates, float[] normals, int[] indices) {
         int vaoID = createVAO();
 
         bindIndicesBuffer(indices);
         storeDataInAttributeList(0, 3, positions);
         storeDataInAttributeList(1, 2, textureCoordinates);
+        storeDataInAttributeList(2, 3, normals);
 
         unbindVAO();
 
@@ -118,7 +120,7 @@ public class Loader {
     /**
      * Store the vertex data in a new float buffer.
      *
-     * @param data Vertex data to be stored in a new float bufer.
+     * @param data Vertex data to be stored in a new float buffer.
      * @return Float buffer with vertex data.
      */
     private FloatBuffer storeDataInFloatBuffer(float[] data) {

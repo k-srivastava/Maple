@@ -9,10 +9,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
-import renderEngine.Renderer;
-import shaders.StaticShader;
 import textures.ModelTexture;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Main game loop for the game engine and entry point for testing the engine.
@@ -22,35 +25,40 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
 
         Loader loader = new Loader();
-        StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);
+        MasterRenderer renderer = new MasterRenderer();
         Camera camera = new Camera();
 
         RawModel model = OBJLoader.loadOBJModel("dragon", loader);
-        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("white")));
-        ModelTexture texture = staticModel.texture();
-        texture.setShineDamping(10);
-        texture.setReflectivity(1);
+        TexturedModel dragonModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("white")));
+        Light light = new Light(new Vector3f(3000, 2000, 3000), new Vector3f(1, 1, 1));
 
-        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -25), new Vector3f(), 1);
-        Light light = new Light(new Vector3f(0, 0, -20), new Vector3f(1, 1, 1));
+        List<Entity> dragons = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < 20; i++) {
+            float x = random.nextFloat() * 100 - 50;
+            float y = random.nextFloat() * 100 - 50;
+            float z = random.nextFloat() * -300;
+
+            float rx = random.nextFloat() * 180f;
+            float ry = random.nextFloat() * 180f;
+
+            dragons.add(new Entity(dragonModel, new Vector3f(x, y, z), new Vector3f(rx, ry, 0), 1));
+        }
 
         while (!Display.isCloseRequested()) {
-            entity.rotate(new Vector3f(0, 1, 0));
             camera.move();
 
-            renderer.prepare();
-            shader.start();
-            shader.loadLight(light);
+            for (Entity dragon : dragons) {
+                renderer.processEntity(dragon);
+            }
 
-            shader.loadViewMatrix(camera);
-            renderer.render(entity, shader);
+            renderer.render(light, camera);
 
-            shader.stop();
             DisplayManager.updateDisplay();
         }
 
-        shader.cleanUp();
+        renderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
     }

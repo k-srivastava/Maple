@@ -23,7 +23,9 @@ public class DisplayManager {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
             Display.create(new PixelFormat(), contextAttribs);
             Display.setTitle("Maple Window");
-        } catch (LWJGLException e) {
+        }
+
+        catch (LWJGLException e) {
             throw new RuntimeException(e);
         }
 

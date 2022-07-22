@@ -33,6 +33,7 @@ public class Loader {
         int vaoID = GL30.glGenVertexArrays();
         VAOs.add(vaoID);
         GL30.glBindVertexArray(vaoID);
+
         return vaoID;
     }
 
@@ -41,67 +42,6 @@ public class Loader {
      */
     private void unbindVAO() {
         GL30.glBindVertexArray(0);
-    }
-
-
-    /**
-     * Store the vertex data in a new float buffer.
-     *
-     * @param data Vertex data to be stored in a new float bufer.
-     * @return Float buffer with vertex data.
-     */
-    private FloatBuffer storeDataInFloatBuffer(float[] data) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
-        buffer.put(data);
-        buffer.flip();
-
-        return buffer;
-    }
-
-    /**
-     * Store the index data in a new integer buffer.
-     *
-     * @param data Index data to be stored in a new integer buffer.
-     * @return Integer buffer with index data.
-     */
-    private IntBuffer storeDataInIntBuffer(int[] data) {
-        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
-        buffer.put(data);
-        buffer.flip();
-
-        return buffer;
-    }
-
-    /**
-     * Store the vertex data in an attribute list in a particular slot.
-     *
-     * @param attributeNumber Slot number of where data is stored.
-     * @param coordinateSize  Size of the coordinates to be stored in an attribute list.
-     * @param data            Vertex data to be stored in an attribute list.
-     */
-    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
-        int vboID = GL15.glGenBuffers();
-        VBOs.add(vboID);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-
-        FloatBuffer buffer = storeDataInFloatBuffer(data);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attributeNumber, coordinateSize, GL11.GL_FLOAT, false, 0, 0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-    }
-
-    /**
-     * Bind an array of indices to an OpenGL element array buffer.
-     *
-     * @param indices Indices to be bound.
-     */
-    private void bindIndicesBuffer(int[] indices) {
-        int vboID = GL15.glGenBuffers();
-        VBOs.add(vboID);
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
-
-        IntBuffer buffer = storeDataInIntBuffer(indices);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
     }
 
     /**
@@ -124,19 +64,87 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
+    /**
+     * Load a texture using an existing PNG file.
+     *
+     * @param filename Name of PNG texture file.
+     * @return Location of the texture ID.
+     */
     public int loadTexture(String filename) {
-        Texture texture = null;
+        Texture texture;
 
         try {
             texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + filename + ".png"));
-        } catch (IOException e) {
+        }
+
+        catch (IOException e) {
+            System.err.println("Tried to load texture " + filename + ".png unsuccessfully.");
             throw new RuntimeException(e);
         }
 
         int textureID = texture.getTextureID();
         TEXTURES.add(textureID);
-
         return textureID;
+    }
+
+    /**
+     * Bind an array of indices to an OpenGL element array buffer.
+     *
+     * @param indices Indices to be bound.
+     */
+    private void bindIndicesBuffer(int[] indices) {
+        int vboID = GL15.glGenBuffers();
+        VBOs.add(vboID);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+
+        IntBuffer buffer = storeDataInIntBuffer(indices);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+    }
+
+    /**
+     * Store the index data in a new integer buffer.
+     *
+     * @param data Index data to be stored in a new integer buffer.
+     * @return Integer buffer with index data.
+     */
+    private IntBuffer storeDataInIntBuffer(int[] data) {
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+
+        return buffer;
+    }
+
+    /**
+     * Store the vertex data in a new float buffer.
+     *
+     * @param data Vertex data to be stored in a new float bufer.
+     * @return Float buffer with vertex data.
+     */
+    private FloatBuffer storeDataInFloatBuffer(float[] data) {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+
+        return buffer;
+    }
+
+    /**
+     * Store the vertex data in an attribute list in a particular slot.
+     *
+     * @param attributeNumber Slot number of where data is stored.
+     * @param coordinateSize  Size of the coordinates to be stored in an attribute list.
+     * @param data            Vertex data to be stored in an attribute list.
+     */
+    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
+        int vboID = GL15.glGenBuffers();
+        VBOs.add(vboID);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+
+        FloatBuffer buffer = storeDataInFloatBuffer(data);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+        GL20.glVertexAttribPointer(attributeNumber, coordinateSize, GL11.GL_FLOAT, false, 0, 0);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
     /**

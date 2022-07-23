@@ -1,5 +1,7 @@
 package engineTests;
 
+import OBJConverter.ModelData;
+import OBJConverter.OBJFileLoader;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -10,7 +12,6 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
 
@@ -25,8 +26,9 @@ public class MainGameLoop {
         MasterRenderer renderer = new MasterRenderer();
         Camera camera = new Camera();
 
-        RawModel model = OBJLoader.loadOBJModel("tree", loader);
-        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
+        ModelData data = OBJFileLoader.loadOBJ("tree");
+        RawModel treeModel = loader.loadToVAO(data.vertices(), data.textureCoordinates(), data.normals(), data.indices());
+        TexturedModel staticModel = new TexturedModel(treeModel, new ModelTexture(loader.loadTexture("tree")));
 
         Entity entity = new Entity(staticModel, new Vector3f(0, 0, -25), new Vector3f(), 1);
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));

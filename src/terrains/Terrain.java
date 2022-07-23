@@ -2,7 +2,8 @@ package terrains;
 
 import models.RawModel;
 import renderEngine.Loader;
-import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 /**
  * Terrain class for the engine.
@@ -15,20 +16,24 @@ public class Terrain {
     private final float Z;
 
     private final RawModel MODEL;
-    private final ModelTexture TEXTURE;
+    private final TerrainTexturePack TEXTURE_PACK;
+    private final TerrainTexture BLEND_MAP;
 
     /**
      * Create a new terrain piece at a given location using a given texture.
      *
-     * @param gridX   X position of the terrain.
-     * @param gridZ   Z position of the terrain.
-     * @param loader  Loader class to load the terrain model.
-     * @param texture Texture of the terrain.
+     * @param gridX       X position of the terrain.
+     * @param gridZ       Z position of the terrain.
+     * @param loader      Loader class to load the terrain model.
+     * @param texturePack Texture pack for all the four textured to be blended onto the terrain.
+     * @param blendMap    Texture describing how to blend all the textured on the terrain.
      */
-    public Terrain(int gridX, int gridZ, Loader loader, ModelTexture texture) {
+    public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap) {
         this.X = gridX * SIZE;
         this.Z = gridZ * SIZE;
-        this.TEXTURE = texture;
+        this.TEXTURE_PACK = texturePack;
+        this.BLEND_MAP = blendMap;
+
         this.MODEL = generateTerrain(loader);
     }
 
@@ -97,7 +102,11 @@ public class Terrain {
         return MODEL;
     }
 
-    public ModelTexture getTexture() {
-        return TEXTURE;
+    public TerrainTexturePack getTexturePack() {
+        return TEXTURE_PACK;
+    }
+
+    public TerrainTexture getBlendMap() {
+        return BLEND_MAP;
     }
 }

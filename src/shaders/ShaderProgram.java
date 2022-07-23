@@ -143,6 +143,16 @@ public abstract class ShaderProgram {
     }
 
     /**
+     * Load an integer value into a particular location within the shader.
+     *
+     * @param location Location of the variable within the shader.
+     * @param value    Integer value to be loaded.
+     */
+    protected void loadInt(int location, int value) {
+        GL20.glUniform1i(location, value);
+    }
+
+    /**
      * Load a floating point value into a particular location within the shader.
      *
      * @param location Location of the variable within the shader.

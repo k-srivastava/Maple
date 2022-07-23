@@ -21,6 +21,12 @@ public class TerrainShader extends ShaderProgram {
 
     private int skyColorLocation;
 
+    private int backgroundTextureLocation;
+    private int rTextureLocation;
+    private int gTextureLocation;
+    private int bTextureLocation;
+    private int blendMapLocation;
+
     /**
      * Create a new static shader using pre-written GLSL vertex and fragment shaders.
      */
@@ -87,6 +93,17 @@ public class TerrainShader extends ShaderProgram {
     }
 
     /**
+     * Connect the texture units of each one of the four terrain texture maps.
+     */
+    public void connectTextureUnits() {
+        super.loadInt(backgroundTextureLocation, 0);
+        super.loadInt(rTextureLocation, 1);
+        super.loadInt(gTextureLocation, 2);
+        super.loadInt(bTextureLocation, 3);
+        super.loadInt(blendMapLocation, 4);
+    }
+
+    /**
      * Bind the particular attributes within the current shader.
      */
     @Override
@@ -111,5 +128,11 @@ public class TerrainShader extends ShaderProgram {
         reflectivityLocation = super.getUniformLocation("reflectivity");
 
         skyColorLocation = super.getUniformLocation("skyColor");
+
+        backgroundTextureLocation = super.getUniformLocation("backgroundTexture");
+        rTextureLocation = super.getUniformLocation("rTexture");
+        gTextureLocation = super.getUniformLocation("gTexture");
+        bTextureLocation = super.getUniformLocation("bTexture");
+        blendMapLocation = super.getUniformLocation("blendMap");
     }
 }

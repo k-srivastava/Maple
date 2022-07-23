@@ -20,6 +20,7 @@ public class StaticShader extends ShaderProgram {
     private int lightColorLocation;
     private int shineDampingLocation;
     private int reflectivityLocation;
+    private int useFakeLightingLocation;
 
     /**
      * Create a new static shader using pre-written GLSL vertex and fragment shaders.
@@ -69,12 +70,21 @@ public class StaticShader extends ShaderProgram {
     /**
      * Load specular light information within the shader.
      *
-     * @param damping Damping of the specular lighting.
+     * @param damping      Damping of the specular lighting.
      * @param reflectivity Reflectivity of the texture.
      */
     public void loadSpecularLightData(float damping, float reflectivity) {
         super.loadFloat(shineDampingLocation, damping);
         super.loadFloat(reflectivityLocation, reflectivity);
+    }
+
+    /**
+     * Load a boolean if fake vertical lighting is to be used or not.
+     *
+     * @param useFakeLighting Whether to use fake vertical lighting or not.
+     */
+    public void loadFakeLighting(boolean useFakeLighting) {
+        super.loadBoolean(useFakeLightingLocation, useFakeLighting);
     }
 
     /**
@@ -100,5 +110,6 @@ public class StaticShader extends ShaderProgram {
         lightColorLocation = super.getUniformLocation("lightColor");
         shineDampingLocation = super.getUniformLocation("shineDamping");
         reflectivityLocation = super.getUniformLocation("reflectivity");
+        useFakeLightingLocation = super.getUniformLocation("useFakeLighting");
     }
 }

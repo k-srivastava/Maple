@@ -66,7 +66,10 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(1); // Texture coordinates.
         GL20.glEnableVertexAttribArray(2); // Normal.
 
+        if (texture.isHasTransparency()) MasterRenderer.disableBackFaceCulling();
+
         SHADER.loadSpecularLightData(texture.getShineDamping(), texture.getReflectivity());
+        SHADER.loadFakeLighting(texture.isUseFakeLighting());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
@@ -76,6 +79,8 @@ public class EntityRenderer {
      * Unbind the texture by disabling and unbinding the VAOs.
      */
     private void unbindTexturedModel() {
+        MasterRenderer.enableBackFaceCulling();
+
         GL20.glDisableVertexAttribArray(0); // Position.
         GL20.glDisableVertexAttribArray(1); // Texture coordinates.
         GL20.glDisableVertexAttribArray(2); // Normal.

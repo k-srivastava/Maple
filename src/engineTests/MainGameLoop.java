@@ -11,11 +11,8 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
+import terrains.Terrain;
 import textures.ModelTexture;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Main game loop for the game engine and entry point for testing the engine.
@@ -28,30 +25,22 @@ public class MainGameLoop {
         MasterRenderer renderer = new MasterRenderer();
         Camera camera = new Camera();
 
-        RawModel model = OBJLoader.loadOBJModel("dragon", loader);
-        TexturedModel dragonModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("white")));
-        Light light = new Light(new Vector3f(3000, 2000, 3000), new Vector3f(1, 1, 1));
+        RawModel model = OBJLoader.loadOBJModel("tree", loader);
+        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
 
-        List<Entity> dragons = new ArrayList<>();
-        Random random = new Random();
+        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -25), new Vector3f(), 1);
+        Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 
-        for (int i = 0; i < 20; i++) {
-            float x = random.nextFloat() * 100 - 50;
-            float y = random.nextFloat() * 100 - 50;
-            float z = random.nextFloat() * -300;
-
-            float rx = random.nextFloat() * 180f;
-            float ry = random.nextFloat() * 180f;
-
-            dragons.add(new Entity(dragonModel, new Vector3f(x, y, z), new Vector3f(rx, ry, 0), 1));
-        }
+        Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
 
         while (!Display.isCloseRequested()) {
+            entity.rotate(new Vector3f(0, 1, 0));
             camera.move();
 
-            for (Entity dragon : dragons) {
-                renderer.processEntity(dragon);
-            }
+            renderer.processTerrain(terrain);
+            renderer.processTerrain(terrain2);
+            renderer.processEntity(entity);
 
             renderer.render(light, camera);
 

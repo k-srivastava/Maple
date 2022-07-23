@@ -191,11 +191,11 @@ public class OBJFileLoader {
         for (int i = 0; i < vertices.size(); i++) {
             Vertex currentVertex = vertices.get(i);
 
-            if (currentVertex.getLength() > furthestPoint) furthestPoint = currentVertex.getLength();
+            if (currentVertex.length() > furthestPoint) furthestPoint = currentVertex.length();
 
-            Vector3f position = currentVertex.getPosition();
-            Vector2f textureCoordinate = textureCoordinates.get(currentVertex.getTextureIndex());
-            Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
+            Vector3f position = currentVertex.position();
+            Vector2f textureCoordinate = textureCoordinates.get(currentVertex.textureIndex());
+            Vector3f normalVector = normals.get(currentVertex.normalIndex());
 
             verticesArray[i * 3] = position.x;
             verticesArray[i * 3 + 1] = position.y;
@@ -226,24 +226,24 @@ public class OBJFileLoader {
             List<Vertex> vertices
     ) {
         if (previousVertex.hasSameTextureAndNormal(newTextureCoordinateIndex, newNormalIndex)) {
-            indices.add(previousVertex.getIndex());
+            indices.add(previousVertex.index());
         }
 
         else {
-            Vertex duplicateVertex = previousVertex.getDuplicateVertex();
+            Vertex duplicateVertex = previousVertex.duplicateVertex();
 
             if (duplicateVertex != null) {
                 manageProcessedVertex(duplicateVertex, newTextureCoordinateIndex, newNormalIndex, indices, vertices);
             }
 
             else {
-                Vertex secondDuplicate = new Vertex(vertices.size(), previousVertex.getPosition());
+                Vertex secondDuplicate = new Vertex(vertices.size(), previousVertex.position());
                 secondDuplicate.setTextureIndex(newTextureCoordinateIndex);
                 secondDuplicate.setNormalIndex(newNormalIndex);
 
                 previousVertex.setDuplicateVertex(secondDuplicate);
                 vertices.add(secondDuplicate);
-                indices.add(secondDuplicate.getIndex());
+                indices.add(secondDuplicate.index());
             }
         }
     }

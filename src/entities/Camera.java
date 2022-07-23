@@ -29,11 +29,11 @@ public class Camera {
         if (Keyboard.isKeyDown(Keyboard.KEY_Q)) POSITION.y -= displacement;
     }
 
-    public Vector3f getPosition() {
+    public Vector3f position() {
         return POSITION;
     }
 
-    public Vector3f getRotation() {
+    public Vector3f rotation() {
         return ROTATION;
     }
 }

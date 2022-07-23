@@ -48,19 +48,19 @@ public class Vertex {
         return textureIndex == textureIndexOther && normalIndex == normalIndexOther;
     }
 
-    public int getIndex() {
+    public int index() {
         return INDEX;
     }
 
-    public Vector3f getPosition() {
+    public Vector3f position() {
         return POSITION;
     }
 
-    public float getLength() {
+    public float length() {
         return LENGTH;
     }
 
-    public int getTextureIndex() {
+    public int textureIndex() {
         return textureIndex;
     }
 
@@ -68,7 +68,7 @@ public class Vertex {
         this.textureIndex = textureIndex;
     }
 
-    public int getNormalIndex() {
+    public int normalIndex() {
         return normalIndex;
     }
 
@@ -76,7 +76,7 @@ public class Vertex {
         this.normalIndex = normalIndex;
     }
 
-    public Vertex getDuplicateVertex() {
+    public Vertex duplicateVertex() {
         return duplicateVertex;
     }
 

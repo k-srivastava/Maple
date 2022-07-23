@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
  * Entity class containing a textured model, positional and rotational data. Can be rendered to the display.
  */
 public class Entity {
-    private TexturedModel model;
+    private TexturedModel texturedModel;
     private Vector3f position;
     private Vector3f rotation;
     private float scale;
@@ -15,13 +15,13 @@ public class Entity {
     /**
      * Create a new entity that can be rendered to the display.
      *
-     * @param model    Textured model for the entity.
-     * @param position Position of the entity.
-     * @param rotation Rotation of the entity.
-     * @param scale    Scale of the entity.
+     * @param texturedModel Textured model for the entity.
+     * @param position      Position of the entity.
+     * @param rotation      Rotation of the entity.
+     * @param scale         Scale of the entity.
      */
-    public Entity(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
-        this.model = model;
+    public Entity(TexturedModel texturedModel, Vector3f position, Vector3f rotation, float scale) {
+        this.texturedModel = texturedModel;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
@@ -45,15 +45,15 @@ public class Entity {
         Vector3f.add(this.rotation, angularDisplacement, this.rotation);
     }
 
-    public TexturedModel getModel() {
-        return model;
+    public TexturedModel texturedModel() {
+        return texturedModel;
     }
 
-    public void setModel(TexturedModel model) {
-        this.model = model;
+    public void setTexturedModel(TexturedModel texturedModel) {
+        this.texturedModel = texturedModel;
     }
 
-    public Vector3f getPosition() {
+    public Vector3f position() {
         return position;
     }
 
@@ -61,7 +61,7 @@ public class Entity {
         this.position = position;
     }
 
-    public Vector3f getRotation() {
+    public Vector3f rotation() {
         return rotation;
     }
 
@@ -69,7 +69,7 @@ public class Entity {
         this.rotation = rotation;
     }
 
-    public float getScale() {
+    public float scale() {
         return scale;
     }
 

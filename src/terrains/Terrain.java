@@ -15,7 +15,7 @@ public class Terrain {
     private final float X;
     private final float Z;
 
-    private final RawModel MODEL;
+    private final RawModel RAW_MODEL;
     private final TerrainTexturePack TEXTURE_PACK;
     private final TerrainTexture BLEND_MAP;
 
@@ -34,7 +34,7 @@ public class Terrain {
         this.TEXTURE_PACK = texturePack;
         this.BLEND_MAP = blendMap;
 
-        this.MODEL = generateTerrain(loader);
+        this.RAW_MODEL = generateTerrain(loader);
     }
 
     /**
@@ -90,23 +90,23 @@ public class Terrain {
         return loader.loadToVAO(vertices, textureCoordinates, normals, indices);
     }
 
-    public float getX() {
+    public float x() {
         return X;
     }
 
-    public float getZ() {
+    public float z() {
         return Z;
     }
 
-    public RawModel getModel() {
-        return MODEL;
+    public RawModel rawModel() {
+        return RAW_MODEL;
     }
 
-    public TerrainTexturePack getTexturePack() {
+    public TerrainTexturePack texturePack() {
         return TEXTURE_PACK;
     }
 
-    public TerrainTexture getBlendMap() {
+    public TerrainTexture blendMap() {
         return BLEND_MAP;
     }
 }

@@ -3,7 +3,10 @@ package renderEngine;
 import entities.Entity;
 import models.RawModel;
 import models.TexturedModel;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import shaders.StaticShader;
 import textures.ModelTexture;
@@ -66,13 +69,13 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(1); // Texture coordinates.
         GL20.glEnableVertexAttribArray(2); // Normal.
 
-        if (texture.isHasTransparency()) MasterRenderer.disableBackFaceCulling();
+        if (texture.hasTransparency()) MasterRenderer.disableBackFaceCulling();
 
-        SHADER.loadSpecularLightData(texture.getShineDamping(), texture.getReflectivity());
-        SHADER.loadFakeLighting(texture.isUseFakeLighting());
+        SHADER.loadSpecularLightData(texture.shineDamping(), texture.reflectivity());
+        SHADER.loadFakeLighting(texture.useFakeLighting());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.textureID());
     }
 
     /**
@@ -94,7 +97,7 @@ public class EntityRenderer {
      */
     private void prepareEntity(Entity entity) {
         Matrix4f transformationMatrix = EngineMath.createTransformationMatrix(
-                entity.getPosition(), entity.getRotation(), entity.getScale()
+                entity.position(), entity.rotation(), entity.scale()
         );
 
         SHADER.loadTransformationMatrix(transformationMatrix);

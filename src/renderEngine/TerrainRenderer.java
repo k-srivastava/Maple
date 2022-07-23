@@ -47,7 +47,7 @@ public class TerrainRenderer {
             prepareTerrain(terrain);
             loadModelMatrix(terrain);
 
-            GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getModel().vertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.rawModel().vertexCount(), GL11.GL_UNSIGNED_INT, 0);
 
             unbindTerrainTexturedModel();
         }
@@ -60,7 +60,7 @@ public class TerrainRenderer {
      * @param terrain Terrain to be prepared.
      */
     private void prepareTerrain(Terrain terrain) {
-        RawModel rawModel = terrain.getModel();
+        RawModel rawModel = terrain.rawModel();
 
         GL30.glBindVertexArray(rawModel.vaoID());
         GL20.glEnableVertexAttribArray(0); // Position.
@@ -78,7 +78,7 @@ public class TerrainRenderer {
      * @param terrain Terrain whose textures are to be bound.
      */
     private void bindTextures(Terrain terrain) {
-        TerrainTexturePack texturePack = terrain.getTexturePack();
+        TerrainTexturePack texturePack = terrain.texturePack();
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.backgroundTexture().textureID());
@@ -93,7 +93,7 @@ public class TerrainRenderer {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.bTexture().textureID());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE4);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().textureID());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.blendMap().textureID());
     }
 
     /**
@@ -113,7 +113,7 @@ public class TerrainRenderer {
      */
     private void loadModelMatrix(Terrain terrain) {
         Matrix4f transformationMatrix = EngineMath.createTransformationMatrix(
-                new Vector3f(terrain.getX(), 0, terrain.getZ()), new Vector3f(), 1
+                new Vector3f(terrain.x(), 0, terrain.z()), new Vector3f(), 1
         );
 
         SHADER.loadTransformationMatrix(transformationMatrix);

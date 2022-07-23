@@ -37,12 +37,12 @@ public class EngineMath {
      */
     public static Matrix4f createViewMatrix(Camera camera) {
         Matrix4f viewMatrix = new Matrix4f();
-        Vector3f cameraPosition = camera.getPosition();
+        Vector3f cameraPosition = camera.position();
         Vector3f negativeCameraPosition = new Vector3f(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
 
         viewMatrix.setIdentity();
-        viewMatrix.rotate((float) Math.toRadians(camera.getRotation().x), new Vector3f(1, 0, 0));
-        viewMatrix.rotate((float) Math.toRadians(camera.getRotation().y), new Vector3f(0, 1, 0));
+        viewMatrix.rotate((float) Math.toRadians(camera.rotation().x), new Vector3f(1, 0, 0));
+        viewMatrix.rotate((float) Math.toRadians(camera.rotation().y), new Vector3f(0, 1, 0));
         viewMatrix.translate(negativeCameraPosition);
 
         return viewMatrix;

@@ -7,6 +7,7 @@ import models.TexturedModel;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
 import shaders.TerrainShader;
 import terrains.Terrain;
@@ -23,6 +24,8 @@ public class MasterRenderer {
     private static final int FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
+
+    private static final Vector3f SKY_COLOR = new Vector3f(0.5f, 0.5f, 0.5f);
 
     private Matrix4f projectionMatrix;
 
@@ -52,7 +55,7 @@ public class MasterRenderer {
     public void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0, 0.4f, 0.7f, 1);
+        GL11.glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1);
     }
 
     /**
@@ -95,6 +98,7 @@ public class MasterRenderer {
         // Entity renderer and static shader.
         STATIC_SHADER.start();
 
+        STATIC_SHADER.loadSkyColor(SKY_COLOR);
         STATIC_SHADER.loadLight(globalLight);
         STATIC_SHADER.loadViewMatrix(camera);
 
@@ -105,6 +109,7 @@ public class MasterRenderer {
         // Terrain renderer and terrain shader.
         TERRAIN_SHADER.start();
 
+        TERRAIN_SHADER.loadSkyColor(SKY_COLOR);
         TERRAIN_SHADER.loadLight(globalLight);
         TERRAIN_SHADER.loadViewMatrix(camera);
 

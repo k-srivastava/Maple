@@ -3,6 +3,7 @@ package shaders;
 import entities.Camera;
 import entities.Light;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import toolbox.EngineMath;
 
 public class TerrainShader extends ShaderProgram {
@@ -17,6 +18,8 @@ public class TerrainShader extends ShaderProgram {
     private int lightColorLocation;
     private int shineDampingLocation;
     private int reflectivityLocation;
+
+    private int skyColorLocation;
 
     /**
      * Create a new static shader using pre-written GLSL vertex and fragment shaders.
@@ -66,12 +69,21 @@ public class TerrainShader extends ShaderProgram {
     /**
      * Load specular light information within the shader.
      *
-     * @param damping Damping of the specular lighting.
-     * @param reflectivity Reflectivity of the texture.
+     * @param damping      Damping of the specular lighting to be loaded.
+     * @param reflectivity Reflectivity of the texture to be loaded.
      */
     public void loadSpecularLightData(float damping, float reflectivity) {
         super.loadFloat(shineDampingLocation, damping);
         super.loadFloat(reflectivityLocation, reflectivity);
+    }
+
+    /**
+     * Load a vector representing the sky color in RGB within the shader.
+     *
+     * @param color Sky color to be loaded.
+     */
+    public void loadSkyColor(Vector3f color) {
+        super.loadVector3f(skyColorLocation, color);
     }
 
     /**
@@ -97,5 +109,7 @@ public class TerrainShader extends ShaderProgram {
         lightColorLocation = super.getUniformLocation("lightColor");
         shineDampingLocation = super.getUniformLocation("shineDamping");
         reflectivityLocation = super.getUniformLocation("reflectivity");
+
+        skyColorLocation = super.getUniformLocation("skyColor");
     }
 }

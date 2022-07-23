@@ -3,6 +3,7 @@ package shaders;
 import entities.Camera;
 import entities.Light;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import toolbox.EngineMath;
 
 /**
@@ -21,6 +22,8 @@ public class StaticShader extends ShaderProgram {
     private int shineDampingLocation;
     private int reflectivityLocation;
     private int useFakeLightingLocation;
+
+    private int skyColorLocation;
 
     /**
      * Create a new static shader using pre-written GLSL vertex and fragment shaders.
@@ -70,8 +73,8 @@ public class StaticShader extends ShaderProgram {
     /**
      * Load specular light information within the shader.
      *
-     * @param damping      Damping of the specular lighting.
-     * @param reflectivity Reflectivity of the texture.
+     * @param damping      Damping of the specular lighting to be loaded.
+     * @param reflectivity Reflectivity of the texture to be loaded.
      */
     public void loadSpecularLightData(float damping, float reflectivity) {
         super.loadFloat(shineDampingLocation, damping);
@@ -79,12 +82,21 @@ public class StaticShader extends ShaderProgram {
     }
 
     /**
-     * Load a boolean if fake vertical lighting is to be used or not.
+     * Load a boolean if fake vertical lighting is to be used or not within the shader.
      *
-     * @param useFakeLighting Whether to use fake vertical lighting or not.
+     * @param useFakeLighting Whether to use fake vertical lighting or not to be loaded.
      */
     public void loadFakeLighting(boolean useFakeLighting) {
         super.loadBoolean(useFakeLightingLocation, useFakeLighting);
+    }
+
+    /**
+     * Load a vector representing the sky color in RGB within the shader.
+     *
+     * @param color Sky color to be loaded.
+     */
+    public void loadSkyColor(Vector3f color) {
+        super.loadVector3f(skyColorLocation, color);
     }
 
     /**
@@ -111,5 +123,7 @@ public class StaticShader extends ShaderProgram {
         shineDampingLocation = super.getUniformLocation("shineDamping");
         reflectivityLocation = super.getUniformLocation("reflectivity");
         useFakeLightingLocation = super.getUniformLocation("useFakeLighting");
+
+        skyColorLocation = super.getUniformLocation("skyColor");
     }
 }

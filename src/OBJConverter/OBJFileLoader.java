@@ -1,7 +1,9 @@
 package OBJConverter;
 
+import models.RawModel;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import renderEngine.Loader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ public class OBJFileLoader {
     private static final String RES_DIRECTORY_PATH = "res/";
 
     /**
-     * Load an OBJ file in the "res" directory into a new model.
+     * Load an OBJ file in the "res" directory into new model data.
      *
      * @param filename Name of the OBJ file.
      * @return Model data of the OBJ file.
@@ -117,6 +119,18 @@ public class OBJFileLoader {
         );
 
         return new ModelData(verticesArray, textureCoordinatesArray, normalsArray, indicesArray, furthest);
+    }
+
+    /**
+     * Load an OBJ file in the "res" directory into a new complete model.
+     *
+     * @param filename Name of the OBJ file.
+     * @param loader   Loader class to load the object into a VAO.
+     * @return Object model data loaded into a VAO.
+     */
+    public static RawModel loadOBJToVAO(String filename, Loader loader) {
+        ModelData data = loadOBJ(filename);
+        return loader.loadToVAO(data.vertices(), data.textureCoordinates(), data.normals(), data.indices());
     }
 
     /**

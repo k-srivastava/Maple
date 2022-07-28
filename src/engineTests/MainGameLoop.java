@@ -123,7 +123,7 @@ public class MainGameLoop {
         Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
         Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
 
-        Camera camera = new Camera();
+        Camera camera = new Camera(player);
         MasterRenderer renderer = new MasterRenderer();
 
         while (!Display.isCloseRequested()) {

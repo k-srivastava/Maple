@@ -4,6 +4,7 @@ import OBJConverter.OBJFileLoader;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -62,6 +63,11 @@ public class MainGameLoop {
                 new ModelTexture(loader.loadTexture("lowPolyTree"))
         );
 
+        TexturedModel stanfordBunny = new TexturedModel(
+                OBJFileLoader.loadOBJToVAO("bunny", loader),
+                new ModelTexture(loader.loadTexture("white"))
+        );
+
         grass.texture().setHasTransparency(true);
         grass.texture().setUseFakeLighting(true);
 
@@ -110,6 +116,8 @@ public class MainGameLoop {
             }
         }
 
+        Player player = new Player(stanfordBunny, new Vector3f(100, 0, -50), new Vector3f(), 1);
+
         Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1, 1, 1));
 
         Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
@@ -120,6 +128,9 @@ public class MainGameLoop {
 
         while (!Display.isCloseRequested()) {
             camera.move();
+            player.move();
+
+            renderer.processEntity(player);
 
             renderer.processTerrain(terrain);
             renderer.processTerrain(terrain2);

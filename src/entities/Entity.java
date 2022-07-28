@@ -39,10 +39,10 @@ public class Entity {
     /**
      * Rotate the entity by a new angular displacement.
      *
-     * @param angularDisplacement Displacement by which the entity is to be rotated.
+     * @param angularRotation Rotation by which the entity is to be rotated.
      */
-    public void rotate(Vector3f angularDisplacement) {
-        Vector3f.add(this.rotation, angularDisplacement, this.rotation);
+    public void rotate(Vector3f angularRotation) {
+        Vector3f.add(this.rotation, angularRotation, this.rotation);
     }
 
     public TexturedModel texturedModel() {
